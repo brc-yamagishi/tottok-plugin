@@ -1,13 +1,11 @@
 ---
-description: tottok の初期セットアップ — CLI runtime ダウンロード + PAT 登録 + MCP 接続登録を 1 本のラッパスクリプトで実行する
-allowed-tools: ["Bash", "Read"]
+description: tottok の初期セットアップ — tottok shim 経由で 1 本のコマンドにまとめる
+allowed-tools: ["Bash"]
 ---
 
 # /tottok-setup — tottok 初期セットアップ
 
-実際のセットアップ (CLI runtime DL / uv sync / PAT 登録 / claude mcp add) は **1 本のラッパスクリプト** ``plugin/scripts/install.sh`` に集約されているため、Bash 許可ダイアログを 1 回で済ませられる。
-
-AI は以下の 3 ステップでユーザを誘導してください:
+`tottok` shim (= `~/.local/bin/tottok`) は plugin の SessionStart hook で自動配置される。AI は以下の 3 ステップで対話する:
 
 ## 1. backend URL の確認
 
@@ -22,23 +20,28 @@ AI は以下の 3 ステップでユーザを誘導してください:
 
 回答が `PAT` になる。
 
-## 3. ラッパスクリプトを 1 回だけ実行
+## 3. tottok setup を 1 回だけ実行
 
-以下を Bash で **1 度だけ** 実行する:
+`tottok` コマンドが PATH 上にあるかを ``command -v tottok`` で確認:
 
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/plugin/scripts/install.sh" "<BASE_URL>" "<PAT>"
-```
+- **PATH にある (通常ケース)**: 以下を 1 度実行
+  ```bash
+  tottok setup "<BASE_URL>" "<PAT>"
+  ```
+- **PATH に無い (初回 install 直後で SessionStart hook 未発火等)**: plugin 同梱の install.sh で代替
+  ```bash
+  bash "${CLAUDE_PLUGIN_ROOT}/scripts/install.sh" "<BASE_URL>" "<PAT>"
+  ```
 
-スクリプトが内部で:
+どちらも内部で:
 
 1. `~/.tottok/cli/` に CLI runtime をダウンロード + 展開
 2. `uv sync --quiet` で依存解決
 3. `tottok config set` で PAT / base_url を保存
-4. `claude mcp add --transport http` で MCP server を登録 (既存があれば一度 remove してから add)
+4. `claude mcp add --transport http` で MCP server を登録 (既存は一度 remove)
 5. `tottok teams` で疎通確認
 
-の 5 つを順に実行し、最後に「✅ tottok セットアップ完了」を出す。
+を実行し、最後に「✅ tottok セットアップ完了」を出す。
 
 エラーが出たら出力を確認:
 
@@ -54,23 +57,41 @@ bash "${CLAUDE_PLUGIN_ROOT}/plugin/scripts/install.sh" "<BASE_URL>" "<PAT>"
 > - SessionStart hook で過去 7 日間の memory digest が AI の context に注入されます
 > - Stop hook で会話 turn が自動キャプチャされます (`~/.tottok/cli` の CLI が `claude -p` で抽出)
 > - 次の Claude Code セッションから動作します
-> - 追加で AI に手動 store させたい時は `mcp__tottok__store_memory` を直接呼ぶことも可能
+> - AI が `mcp__tottok__*` MCP tool を直接呼ぶか、`tottok ...` shim 経由で CLI を叩くこともできます
 
-## 確認プロンプトを毎回出さないために (任意)
+## 確認プロンプトを毎回出さないために (推奨)
 
-毎回 `Do you want to proceed?` が出るのを避けるには、`.claude/settings.local.json` または `~/.claude/settings.json` の `permissions.allow` に以下を追加する:
+`tottok setup` も `tottok list` も `tottok store` も全部 `tottok` コマンドなので、`Bash(tottok:*)` の **1 ルール** で全 invocation を allow できる:
+
+`.claude/settings.local.json` または `~/.claude/settings.json` に追加:
 
 ```json
 {
   "permissions": {
     "allow": [
-      "Bash(bash ${CLAUDE_PLUGIN_ROOT}/plugin/scripts/install.sh:*)"
+      "Bash(tottok:*)"
     ]
   }
 }
 ```
 
-これで `/tottok-setup` 中の Bash 呼び出しが 1 回限りで承認なしで通る。
+初回 install 直後で shim 未配置のケースが心配な場合は、念のため install.sh も allow しておくとよい:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(tottok:*)",
+      "Bash(bash ${CLAUDE_PLUGIN_ROOT}/scripts/install.sh:*)"
+    ]
+  }
+}
+```
+
+## 前提
+
+- `~/.local/bin` が PATH に含まれていること (uv 等で modern setup なら通常デフォルト)
+- 含まれていない場合は `~/.bashrc` / `~/.zshrc` 等に追加: `export PATH="$HOME/.local/bin:$PATH"`
 
 ## 注意
 

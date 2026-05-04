@@ -1,5 +1,5 @@
 {
-  "description": "tottok memory hooks (SessionStart digest injection + Stop auto-capture)",
+  "description": "tottok memory hooks (SessionStart digest + Stop auto-capture, with idempotent tottok shim deployment)",
   "hooks": {
     "SessionStart": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/run-cli.sh\" session-start"
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/install.sh\" --shim-only >/dev/null 2>&1 ; bash \"${CLAUDE_PLUGIN_ROOT}/scripts/run-cli.sh\" session-start"
           }
         ]
       }
