@@ -1,0 +1,18 @@
+{
+  "name": "tottok",
+  "version": "0.1.0",
+  "description": "Remote MCP メモリーサーバ tottok の Claude Code 連携。SessionStart で digest を context に注入、Stop hook で会話を自動キャプチャ、/tottok-setup で初期セットアップを支援する。",
+  "author": {
+    "name": "brc-yamagishi",
+    "url": "https://github.com/brc-yamagishi"
+  },
+  "repository": "https://github.com/brc-yamagishi/tottok-plugin",
+  "license": "MIT",
+  "keywords": [
+    "memory",
+    "context",
+    "mcp",
+    "hooks",
+    "session"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tottok",
+  "description": "tottok MCP メモリーサーバ用 Claude Code plugin (公開配布用)",
+  "owner": {
+    "name": "brc-yamagishi",
+    "url": "https://github.com/brc-yamagishi"
+  },
+  "plugins": [
+    {
+      "name": "tottok",
+      "description": "Remote MCP メモリーサーバ tottok の Claude Code 連携。SessionStart digest + Stop hook auto-capture + /tottok-setup を提供する。",
+      "version": "0.1.0",
+      "category": "productivity",
+      "homepage": "https://github.com/brc-yamagishi/tottok-plugin",
+      "source": {
+        "source": "github",
+        "repo": "brc-yamagishi/tottok-plugin",
+        "ref": "main"
+      },
+      "keywords": ["memory", "context", "mcp", "hooks", "session"]
+    }
+  ]
+}

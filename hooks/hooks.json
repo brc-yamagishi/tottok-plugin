@@ -1,0 +1,27 @@
+{
+  "description": "tottok memory hooks (SessionStart digest injection + Stop auto-capture)",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/run-cli.sh\" session-start"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/run-cli.sh\" stop"
+          }
+        ]
+      }
+    ]
+  }
+}
