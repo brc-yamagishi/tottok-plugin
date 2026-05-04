@@ -37,7 +37,7 @@ cd ~/.tottok/cli && uv sync --quiet
 
 ユーザに以下を表示:
 
-> tottok admin UI (例: ``http://<BASE_URL のホスト部分>:3000/settings/api-keys``) を開き、PAT を発行してコピーしてください。
+> tottok console (例: ``http://<BASE_URL のホスト部分>:3000/settings/api-keys``) を開き、PAT を発行してコピーしてください。
 > 発行された PAT は `rmcp_` で始まる文字列です。
 
 ユーザが PAT を貼り付けたら ``tottok config set`` 相当を実行:
