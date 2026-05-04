@@ -16,7 +16,7 @@
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/brc-yamagishi/tottok-plugin.git",
-        "path": "."
+        "path": "plugin"
       },
       "keywords": [
         "memory",
