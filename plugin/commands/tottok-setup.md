@@ -36,13 +36,23 @@ allowed-tools: ["Bash"]
 
 ## 4. tottok setup を 1 回だけ実行
 
-`tottok` コマンドが PATH 上にあるかを ``command -v tottok`` で確認:
+**重要**: 以下のチェックと実行は **複数の Bash 呼び出しに分けて** 行うこと。``&&`` / ``;`` 等で複合コマンドにすると Claude Code の Bash permission matcher (例: ``Bash(tottok *)``) が複合コマンド全体に対して match できず、ユーザに毎回承認プロンプトを出してしまう。
 
-- **PATH にある (通常ケース)**: 以下を 1 度実行
+### 4-1. `tottok` コマンドの存在確認 (Bash 呼び出し ①)
+
+```bash
+command -v tottok
+```
+
+出力に path が出れば PATH にある (通常ケース)。何も出なければ PATH に無い (初回 install 直後で SessionStart hook 未発火等)。
+
+### 4-2. 上の結果に応じて、**別の Bash 呼び出しで** setup を実行
+
+- **PATH にある**: 以下を **単独の Bash 呼び出し** で実行 (``&&`` 等で繋がない):
   ```bash
   tottok setup "<BASE_URL>" "<PAT>"
   ```
-- **PATH に無い (初回 install 直後で SessionStart hook 未発火等)**: plugin 同梱の install.sh で代替
+- **PATH に無い**: plugin 同梱の install.sh で代替 (これも単独の Bash 呼び出し):
   ```bash
   bash "${CLAUDE_PLUGIN_ROOT}/scripts/install.sh" "<BASE_URL>" "<PAT>"
   ```
