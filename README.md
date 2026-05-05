@@ -1,6 +1,6 @@
 # tottok-plugin
 
-[tottok](https://github.com/brc-yamagishi/tottok) (リモート MCP メモリーサーバ) 用の Claude Code plugin **公開配布リポジトリ**。
+[tottok](https://github.com/brc-yamagishi/tottok) 用の Claude Code plugin **デモ用の公開配布リポジトリ**。
 
 backend 本体 (`brc-yamagishi/tottok`) は private ですが、Claude Code から接続するための plugin manifest と CLI runtime archive はここで public に配布しています。これにより `gh` 認証なしで `claude plugin install` が通ります。
 
