@@ -5,22 +5,36 @@ allowed-tools: ["Bash"]
 
 # /tottok-setup — tottok 初期セットアップ
 
-`tottok` shim (= `~/.local/bin/tottok`) は plugin の SessionStart hook で自動配置される。AI は以下の 3 ステップで対話する:
+`tottok` shim (= `~/.local/bin/tottok`) は plugin の SessionStart hook で自動配置される。AI は以下のステップで対話する:
 
-## 1. backend URL の確認
+## 1. 既存設定の確認 (再 run 検出)
 
-ユーザに「tottok backend の URL を教えてください (default: `http://localhost:8000`)」と質問する。回答が `BASE_URL` になる。空回答なら default を使う。
+まず ``~/.tottok/config.toml`` が存在するか確認する。存在すれば中身から ``base_url`` と ``pat`` を抽出して **既存値** として保持する (例: ``grep -E '^(base_url|pat)' ~/.tottok/config.toml``)。これは「CLI runtime のアップデートだけしたい再 run」のケースで PAT 再入力を省くため。
 
-## 2. PAT の取得案内
+- **存在する** → 以降のステップで「Enter で維持」の default として既存値を使う (再 run モード)
+- **存在しない** → 初回 install。BASE_URL の default は ``http://localhost:8000``、PAT は必須入力
 
-ユーザに以下を表示:
+## 2. backend URL の確認
 
-> tottok console (例: ``http://<BASE_URL のホスト部分>:3000/settings/api-keys``) を開き、PAT を発行してコピーしてください。
-> 発行された PAT は `rmcp_` で始まる文字列です。
+ユーザに以下のいずれかで質問する:
 
-回答が `PAT` になる。
+- **再 run モード**: 「tottok backend の URL を教えてください (現在: ``<existing-base-url>``、Enter で維持)」
+- **初回 install**: 「tottok backend の URL を教えてください (default: ``http://localhost:8000``)」
 
-## 3. tottok setup を 1 回だけ実行
+空回答なら既存値 / default を使う。回答 (または既存値) が ``BASE_URL`` になる。
+
+## 3. PAT の取得案内
+
+ユーザに以下のいずれかで質問する:
+
+- **再 run モード**: 「tottok の PAT を貼り付けてください (現在: ``rmcp_xxxxxxxxxxxx…`` 先頭 12 文字、Enter で維持)」と伝える。空回答なら既存 PAT を使う
+- **初回 install**: 以下を表示:
+  > tottok console (例: ``http://<BASE_URL のホスト部分>:3000/settings/api-keys``) を開き、PAT を発行してコピーしてください。
+  > 発行された PAT は ``rmcp_`` で始まる文字列です。
+
+回答 (または既存値) が ``PAT`` になる。
+
+## 4. tottok setup を 1 回だけ実行
 
 `tottok` コマンドが PATH 上にあるかを ``command -v tottok`` で確認:
 
@@ -49,7 +63,7 @@ allowed-tools: ["Bash"]
 - `tottok teams` で 401/403 → PAT が違う、もしくは expired
 - `tottok teams` で connection error → `BASE_URL` が違う、または backend が起動していない
 
-## 4. 完了報告
+## 5. 完了報告
 
 成功したら以下を返す:
 
