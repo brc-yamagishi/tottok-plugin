@@ -18,21 +18,25 @@ allowed-tools: ["Bash"]
 
 ユーザに以下のいずれかで質問する:
 
-- **再 run モード**: 「tottok backend の URL を教えてください (現在: ``<existing-base-url>``、Enter で維持)」
-- **初回 install**: 「tottok backend の URL を教えてください (default: ``http://localhost:8000``)」
+- **再 run モード**: 「tottok backend の URL を教えてください (現在: ``<existing-base-url>``、変更不要なら ``そのまま`` と入力してください)」
+- **初回 install**: 「tottok backend の URL を教えてください (default: ``http://localhost:8000``、default で良ければ ``default`` と入力してください)」
 
-空回答なら既存値 / default を使う。回答 (または既存値) が ``BASE_URL`` になる。
+回答が ``そのまま`` / ``変更なし`` / ``維持`` 等であれば既存値を使う。``default`` であれば default 値を使う。それ以外なら入力値を ``BASE_URL`` として採用する。
+
+> **注意**: Claude Code の interactive prompt は空入力 (Enter のみ) を submit として扱わない仕様のため、「Enter で維持」のような案内はしない。必ず何か文字列を入力してもらう。
 
 ## 3. PAT の取得案内
 
 ユーザに以下のいずれかで質問する:
 
-- **再 run モード**: 「tottok の PAT を貼り付けてください (現在: ``rmcp_xxxxxxxxxxxx…`` 先頭 12 文字、Enter で維持)」と伝える。空回答なら既存 PAT を使う
+- **再 run モード**: 「tottok の PAT を貼り付けてください (現在: ``rmcp_xxxxxxxxxxxx…`` 先頭 12 文字、変更不要なら ``そのまま`` と入力してください)」
 - **初回 install**: 以下を表示:
   > tottok console (例: ``http://<BASE_URL のホスト部分>:3000/settings/api-keys``) を開き、PAT を発行してコピーしてください。
   > 発行された PAT は ``rmcp_`` で始まる文字列です。
 
-回答 (または既存値) が ``PAT`` になる。
+回答が ``そのまま`` / ``変更なし`` / ``維持`` 等であれば既存 PAT を使う。``rmcp_`` で始まる文字列であれば新しい PAT として採用する。それ以外なら新規 PAT 入力を促す。
+
+> **注意**: 上の step 2 と同じく、Enter のみは submit されない。必ず文字列入力を求める。
 
 ## 4. tottok setup を 1 回だけ実行
 
