@@ -40,7 +40,9 @@ allowed-tools: ["Bash"]
 
 ## 4. tottok setup を 1 回だけ実行
 
-**重要**: 以下のチェックと実行は **複数の Bash 呼び出しに分けて** 行うこと。``&&`` / ``;`` 等で複合コマンドにすると Claude Code の Bash permission matcher (例: ``Bash(tottok *)``) が複合コマンド全体に対して match できず、ユーザに毎回承認プロンプトを出してしまう。
+**重要**:
+- 以下のチェックと実行は **複数の Bash 呼び出しに分けて** 行うこと。``&&`` / ``;`` 等で複合コマンドにすると Claude Code の Bash permission matcher (例: ``Bash(tottok *)``) が複合コマンド全体に対して match できず、ユーザに毎回承認プロンプトを出してしまう。
+- ``time`` / ``nice`` / ``sudo`` 等のラッパで bare command を包まないこと。matcher は ``time tottok ...`` を ``tottok ...`` とは別物として扱うため、ユーザの ``Bash(tottok *)`` rule が効かなくなる。
 
 ### 4-1. `tottok` コマンドの存在確認 (Bash 呼び出し ①)
 
@@ -89,7 +91,7 @@ command -v tottok
 
 ## 確認プロンプトを毎回出さないために (推奨)
 
-`tottok setup` も `tottok list` も `tottok store` も全部 `tottok` コマンドなので、`Bash(tottok:*)` の **1 ルール** で全 invocation を allow できる:
+`tottok setup` も `tottok list` も `tottok store` も全部 `tottok` コマンドなので、`Bash(tottok *)` の **1 ルール** で全 invocation を allow できる:
 
 `.claude/settings.local.json` または `~/.claude/settings.json` に追加:
 
@@ -97,7 +99,7 @@ command -v tottok
 {
   "permissions": {
     "allow": [
-      "Bash(tottok:*)"
+      "Bash(tottok *)"
     ]
   }
 }
@@ -109,8 +111,8 @@ command -v tottok
 {
   "permissions": {
     "allow": [
-      "Bash(tottok:*)",
-      "Bash(bash ${CLAUDE_PLUGIN_ROOT}/scripts/install.sh:*)"
+      "Bash(tottok *)",
+      "Bash(bash ${CLAUDE_PLUGIN_ROOT}/scripts/install.sh *)"
     ]
   }
 }
