@@ -43,7 +43,7 @@ claude plugin install tottok@tottok
 {
   "permissions": {
     "allow": [
-      "Bash(tottok:*)"
+      "Bash(tottok *)"
     ]
   }
 }
