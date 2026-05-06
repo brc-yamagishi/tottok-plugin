@@ -1,6 +1,6 @@
 {
   "name": "tottok",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Remote MCP メモリーサーバ tottok の Claude Code 連携。SessionStart で digest を context に注入、Stop hook で会話を自動キャプチャ、/tottok-setup で初期セットアップを支援する。",
   "author": {
     "name": "brc-yamagishi",

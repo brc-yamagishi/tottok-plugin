@@ -10,7 +10,7 @@
     {
       "name": "tottok",
       "description": "Remote MCP メモリーサーバ tottok の Claude Code 連携。SessionStart digest + Stop hook auto-capture + /tottok-setup を提供する。",
-      "version": "0.2.4",
+      "version": "0.2.5",
       "category": "productivity",
       "homepage": "https://github.com/brc-yamagishi/tottok-plugin",
       "source": {
