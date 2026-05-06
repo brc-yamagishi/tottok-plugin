@@ -110,6 +110,7 @@ claude plugin marketplace add /path/to/tottok-plugin-dir
 | `TOTTOK_PAT` | PAT (rmcp_xxx) |
 | `TOTTOK_BASE_URL` | tottok backend URL |
 | `TOTTOK_WORKSPACE` | workspace 識別子 |
+| `TOTTOK_HOOK_SESSION_START_CONSOLE` | SessionStart 時の人間向け digest 表示 (`summary` / `off`、default `summary`) |
 | `TOTTOK_HOOK_STOP_MIN_CHARS` | Stop hook 自動キャプチャ最小文字数 (default 300) |
 | `TOTTOK_HOOK_STOP_DEDUP_WINDOW_SEC` | 重複キャプチャ抑制 window (default 600) |
 | `TOTTOK_EXTRACTOR_MODE` | `claude_headless` / `off` |
