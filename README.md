@@ -65,11 +65,29 @@ Claude Code session
 
 ## アップデート
 
+3 つの経路があります。**通常は (a) で十分**です:
+
+### (a) `/plugins Update now` (推奨)
+
+Claude Code の ``/plugins`` メニューで本 plugin を選び **Update now** を押す → plugin manifest が refresh される。次のセッション起動時に SessionStart hook が ``EXPECTED_CLI_VERSION`` と ``~/.tottok/cli/.tottok-cli-version`` を比較し、mismatch なら **silent に CLI runtime を再 DL** する。手動操作不要。
+
+### (b) `tottok update` (手動 force)
+
+shim 経由で CLI runtime のみ即座に最新化したい時:
+
+```bash
+tottok update
+```
+
+PAT / MCP 登録は触らない。``/plugins Update now`` を待たずに最新 release を取りに行く。
+
+### (c) `/tottok-setup` 再実行 (PAT / MCP もまとめて再登録)
+
+PAT が変わった、MCP 登録が壊れた等で全部やり直したい時:
+
 ```bash
 /tottok-setup
 ```
-
-を再実行すると `~/.tottok/cli/` の CLI runtime が最新版に置き換わります (PAT / MCP 登録は維持)。
 
 ## アンインストール
 
