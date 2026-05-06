@@ -23,7 +23,7 @@ set -euo pipefail
 
 # 本 plugin が期待する CLI runtime version。新 CLI release ごとに必ず
 # bump すること (release 後の手動同期手順は backend の RELEASE.md 参照)。
-EXPECTED_CLI_VERSION="0.2.3"
+EXPECTED_CLI_VERSION="0.2.4"
 
 ARCHIVE_URL="https://github.com/brc-yamagishi/tottok-plugin/releases/latest/download/tottok-cli.tar.gz"
 CLI_DIR="${HOME}/.tottok/cli"
